@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-prose-serif {
+    font-family: 'Source Serif 4', Georgia, Cambria, 'Times New Roman', Times, serif;
+  }
+  .font-prose-sans {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .font-screenplay {
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+    letter-spacing: 0.02em;
+  }
+
+  /* Liime Words Brand Colors */
+  .bg-lime-brand {
+    background-color: #84cc16;
+  }
+  .bg-lime-dark {
+    background-color: #4d7c0f;
+  }
+  .bg-lime-vibrant {
+    background-color: #a3e635;
+  }
+  .bg-lime-subtle {
+    background-color: #f7fee7;
+  }
+  .text-lime-brand {
+    color: #84cc16;
+  }
+  .text-lime-vibrant {
+    color: #a3e635;
+  }
+  .border-lime-brand {
+    border-color: #84cc16;
+  }
+  .border-lime-light {
+    border-color: #d9f99d;
+  }
+
+  /* Microsoft Word theme colors */
+  .bg-word-blue {
+    background-color: #185abd;
+  }
+  .bg-word-dark-blue {
+    background-color: #103f91;
+  }
+  .bg-word-hover-blue {
+    background-color: #134896;
+  }
+  .text-word-blue {
+    color: #185abd;
+  }
+  .border-word-blue {
+    border-color: #185abd;
+  }
+  .border-word-light-blue {
+    border-color: #c2daf5;
+  }
+  .bg-word-light-blue {
+    background-color: #eef5fc;
+  }
+
+  /* Word Document page drop shadow */
+  .shadow-word-page {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  }
+
+  /* White & Grey Mix Studio Theme */
+  .theme-grey {
+    color-scheme: light;
+  }
+  .theme-grey .bg-neutral-100 {
+    background-color: #e2e8f0;
+  }
+  .theme-grey .bg-neutral-50 {
+    background-color: #f1f5f9;
+  }
+  .theme-grey .border-neutral-200 {
+    border-color: #cbd5e1;
+  }
+  .theme-grey .border-neutral-300 {
+    border-color: #94a3b8;
+  }
+  .theme-grey .text-neutral-900 {
+    color: #0f172a;
+  }
+  .theme-grey .text-neutral-800 {
+    color: #1e293b;
+  }
+  .theme-grey .text-neutral-700 {
+    color: #334155;
+  }
+  .theme-grey .text-neutral-500 {
+    color: #64748b;
+  }
+  .theme-grey .text-neutral-400 {
+    color: #94a3b8;
+  }
+}
+
+/* Text Selection in vibrant lime */
+::selection {
+  background-color: #bef264;
+  color: #142805;
+}
+
+/* Custom scrollbars matching desktop application feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 150, 170, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(132, 204, 22, 0.7);
+}
+
+/* Screenplay element styling */
+.screenplay-character {
+  margin-left: 36%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.screenplay-parenthetical {
+  margin-left: 28%;
+  font-style: italic;
+  max-width: 50%;
+}
+
+.screenplay-dialogue {
+  margin-left: 20%;
+  margin-right: 20%;
+  line-height: 1.35;
+}
+
+.screenplay-transition {
+  text-align: right;
+  font-weight: bold;
+  text-transform: uppercase;
+}

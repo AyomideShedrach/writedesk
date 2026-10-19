@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "UserUsage": {
+      "title": "UserUsage",
+      "description": "User prepaid usage-time balance and trial status",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Authentication UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "balanceSeconds": {
+          "type": "number",
+          "description": "Remaining active usage time in seconds"
+        },
+        "freeTrialClaimed": {
+          "type": "boolean",
+          "description": "Whether the 2-hour one-time free trial was claimed"
+        },
+        "totalPaidHours": {
+          "type": "number",
+          "description": "Cumulative total of purchased hours"
+        },
+        "totalUsedSeconds": {
+          "type": "number",
+          "description": "Total usage time consumed"
+        },
+        "lastHeartbeatAt": {
+          "type": "string",
+          "description": "ISO timestamp of the last active usage heartbeat"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp when account was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp when account was last updated"
+        }
+      },
+      "required": ["userId", "balanceSeconds", "freeTrialClaimed"]
+    },
+    "PaymentTransaction": {
+      "title": "PaymentTransaction",
+      "description": "Payment record verified server-side with Paystack",
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string",
+          "description": "Unique Paystack transaction reference"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID who purchased the package"
+        },
+        "packageId": {
+          "type": "string",
+          "enum": ["start", "friendly", "best_deal"],
+          "description": "Package identifier"
+        },
+        "packageName": {
+          "type": "string",
+          "description": "Human-readable package name"
+        },
+        "hours": {
+          "type": "number",
+          "description": "Purchased hours credited"
+        },
+        "amountNgn": {
+          "type": "number",
+          "description": "Amount in Nigerian Naira"
+        },
+        "amountKobo": {
+          "type": "number",
+          "description": "Amount in Kobo"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["success", "failed", "pending", "cancelled"],
+          "description": "Transaction status"
+        },
+        "channel": {
+          "type": "string",
+          "description": "Payment channel (card, bank, ussd, etc.)"
+        },
+        "creditedAt": {
+          "type": "string",
+          "description": "ISO timestamp when hours were added"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp when transaction was initiated"
+        }
+      },
+      "required": ["reference", "userId", "packageId", "hours", "amountNgn", "status"]
+    },
+    "ClaimedDevice": {
+      "title": "ClaimedDevice",
+      "description": "Hardware device registry enforcing one-time free 2-hour trial per PC",
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique persistent device identifier or fingerprint hash"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID who claimed the guest trial on this PC"
+        },
+        "claimedAt": {
+          "type": "string",
+          "description": "ISO timestamp when 2-hour guest trial was claimed"
+        }
+      },
+      "required": ["deviceId", "userId", "claimedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserUsage",
+      "description": "Individual user usage balance, trial claim status, and metadata"
+    },
+    "/transactions/{reference}": {
+      "schema": "PaymentTransaction",
+      "description": "Idempotent payment records to prevent duplicate hour crediting"
+    },
+    "/claimed_devices/{deviceId}": {
+      "schema": "ClaimedDevice",
+      "description": "Registry of PCs that have claimed the one-time 2-hour guest trial"
+    }
+  }
+}

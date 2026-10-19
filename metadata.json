@@ -1,0 +1,6 @@
+{
+  "name": "Liime Words - Dedicated to Studio Writers",
+  "description": "Liime Words by LIIME — Dedicated to Studio Writers. Desktop novel-writing and story-development studio with automatic story bible extraction, dual-layer screenplay adaptation, chronological timeline, and story relationship graph.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
