@@ -1,198 +1,120 @@
-export type StoryView = 
-  | 'home'
-  | 'write' 
-  | 'bible' 
-  | 'timeline' 
-  | 'scenes' 
-  | 'script' 
-  | 'adaptation' 
-  | 'graph' 
-  | 'animation' 
-  | 'continuity' 
-  | 'search';
+export type StoryView = 'home' | 'write' | 'bible' | 'timeline' | 'script' | 'graph';
 
-export type BibleTab = 'characters' | 'locations' | 'events' | 'objects' | 'relationships';
-
-export type ScreenplayElementType =
-  | 'scene_heading'
-  | 'action'
-  | 'character'
-  | 'dialogue'
-  | 'parenthetical'
-  | 'transition'
-  | 'shot'
-  | 'title'
-  | 'general'
-  | 'note';
-
-export interface ScreenplayElement {
+export interface Chapter {
   id: string;
-  type: ScreenplayElementType;
-  content: string;
-}
-
-export interface AnimationShot {
-  id: string;
-  shotNumber: number;
-  shotType: 'Extreme Wide' | 'Wide Shot' | 'Medium Shot' | 'Medium Close-up' | 'Close-up' | 'Extreme Close-up' | 'Over-the-Shoulder' | 'Point of View' | 'Reverse Shot' | 'Low Angle' | 'Bird Eye';
-  camera: string;
-  action: string;
-  characters: string[];
-  timing: string; // e.g. "3.5s"
-  audioCue?: string;
-  notes?: string;
-}
-
-export interface ScreenplayScene {
-  id: string;
-  sourceSceneId?: string; // Optional link to novel scene
-  sceneNumber: number;
-  slugline: string; // e.g., "INT. ABANDONED TRAIN STATION - NIGHT"
-  elements: ScreenplayElement[];
-  shots?: AnimationShot[];
-}
-
-export interface DetectedEntity {
-  id: string;
-  type: 'character' | 'location' | 'event' | 'object' | 'time';
-  name: string;
-  context: string;
-  sceneId: string;
-  status: 'pending' | 'added' | 'ignored';
-  details?: Record<string, string>;
+  title: string;
+  order: number;
+  synopsis?: string;
 }
 
 export interface Scene {
   id: string;
   chapterId: string;
-  order: number; // Manuscript order
-  storyOrder: number; // Story chronological order (flashbacks can be lower number than chapter 1)
   title: string;
-  content: string; // Manuscript prose text
-  status: 'outline' | 'draft' | 'revision' | 'polished' | 'final';
-  povCharacterId?: string;
-  locationId?: string;
-  time?: string; // e.g. "Midnight", "The following morning", "Three days later"
-  wordCount: number;
-  notes?: string;
-  emotionalBeat?: string;
-  characterIds: string[];
-  eventIds: string[];
-  objectIds?: string[];
-  detectedItems: DetectedEntity[];
-  updatedAt: string;
+  content: string;
+  order: number;
+  synopsis?: string;
+  status?: 'draft' | 'revised' | 'final';
+  pov?: string;
+  timeOfDay?: string;
+  location?: string;
+  targetWordCount?: number;
 }
 
-export interface Chapter {
-  id: string;
-  number: number;
-  title: string;
-  summary?: string;
-  notes?: string;
-  sceneIds: string[];
-}
-
-export interface Character {
+export interface CharacterEntity {
   id: string;
   name: string;
+  role: string;
   aliases?: string[];
-  role: 'protagonist' | 'antagonist' | 'supporting' | 'minor';
-  age?: string;
-  occupation?: string;
-  appearance?: string; // e.g., "Tall, hazel eyes, faded wool overcoat"
-  personality?: string;
+  bio?: string;
+  appearance?: string;
   goals?: string;
-  fears?: string;
-  characterArc?: string;
-  firstAppearanceSceneId?: string;
-  notes?: string;
-  color?: string; // for graph & timeline tags
+  conflicts?: string;
+  arc?: string;
+  tags?: string[];
 }
 
-export interface Location {
+export interface LocationEntity {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   atmosphere?: string;
-  firstAppearanceSceneId?: string;
-  notes?: string;
-}
-
-export interface StoryObject {
-  id: string;
-  name: string;
-  description: string;
   significance?: string;
-  currentOwnerId?: string;
-  notes?: string;
+  scenes?: string[];
+  tags?: string[];
 }
 
-export interface Relationship {
-  id: string;
-  character1Id: string;
-  character2Id: string;
-  type: string; // "Romantic", "Allies", "Rivals", "Family", "Complicated", "Estranged"
-  description: string;
-}
-
-export interface StoryEvent {
+export interface EventEntity {
   id: string;
   name: string;
-  description: string;
-  chronologicalOrder: number; // Story Chronological order
-  manuscriptChapterId?: string;
-  manuscriptSceneId?: string;
-  locationId?: string;
-  timeLabel?: string;
-  charactersInvolved: string[];
+  timelineOrder?: number;
+  dateOrMarker?: string;
+  description?: string;
   consequences?: string;
-  previousEventId?: string;
-  followingEventId?: string;
-  isMilestone?: boolean;
+  participatingCharacters?: string[];
 }
 
-export interface ContinuityIssue {
+export interface ObjectEntity {
   id: string;
-  title: string;
-  type: 'character_trait' | 'timeline_jump' | 'location_anomaly' | 'unresolved_thread';
-  description: string;
-  sceneIds: string[];
-  characterIds: string[];
-  severity: 'low' | 'medium' | 'high';
-  dismissed: boolean;
+  name: string;
+  description?: string;
+  significance?: string;
+  owner?: string;
+  location?: string;
+}
+
+export interface RelationshipEntity {
+  id: string;
+  sourceCharacterId: string;
+  targetCharacterId: string;
+  type: string;
+  dynamic: string;
+  tensionLevel?: number;
+  description?: string;
+}
+
+export interface StoryBible {
+  characters: CharacterEntity[];
+  locations: LocationEntity[];
+  events: EventEntity[];
+  objects: ObjectEntity[];
+  relationships: RelationshipEntity[];
+}
+
+export interface ScreenplayElement {
+  type: 'scene_heading' | 'action' | 'character' | 'dialogue' | 'parenthetical' | 'transition' | 'shot';
+  content: string;
+}
+
+export interface ScreenplayScene {
+  sceneId: string;
+  slugline: string;
+  elements: ScreenplayElement[];
 }
 
 export interface ProjectSettings {
-  fontFamily: 'serif' | 'sans' | 'mono';
-  fontSize: number; // in pt/px (16 standard)
-  theme: 'dark' | 'light' | 'grey' | 'sepia';
-  lineHeight: 'normal' | 'relaxed' | 'loose';
+  theme: 'classic' | 'grey' | 'sepia' | 'dark';
   focusMode: boolean;
-  typewriterMode: boolean;
-  autoExtract: boolean;
-  dailyWordGoal?: number;
+  fontSize: number;
+  fontFamily: string;
+  spellCheck: boolean;
+  autoSaveInterval: number;
 }
 
 export interface Project {
   id: string;
   title: string;
   author: string;
-  type: 'novel' | 'novella' | 'short_story' | 'screenplay' | 'other';
-  logline?: string;
+  type: string;
   genre?: string;
+  logline?: string;
   targetWordCount?: number;
+  dailyWordGoal?: number;
   createdAt: string;
   updatedAt: string;
   chapters: Chapter[];
   scenes: Scene[];
-  storyBible: {
-    characters: Character[];
-    locations: Location[];
-    events: StoryEvent[];
-    objects: StoryObject[];
-    relationships: Relationship[];
-  };
+  storyBible: StoryBible;
   screenplay: ScreenplayScene[];
-  continuityIssues: ContinuityIssue[];
   settings: ProjectSettings;
 }

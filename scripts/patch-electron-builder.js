@@ -2,14 +2,10 @@ import fs from 'fs';
 import path from 'path';
 
 const nsisTargetFile = path.resolve('node_modules/app-builder-lib/out/targets/nsis/NsisTarget.js');
-
 if (fs.existsSync(nsisTargetFile)) {
   let content = fs.readFileSync(nsisTargetFile, 'utf8');
-
-  // Patch uninstaller extraction to avoid failing on missing wine in headless/Linux environments
   if (content.includes('if ((0, macosVersion_1.isMacOsCatalina)()) {') || content.includes('const wineVm = new WineVm_1.WineVmManager')) {
     const originalPattern = /\/\/ http:\/\/forums\.winamp\.com\/showthread\.php\?p=3078545[\s\S]*?await wineVm\.exec\(installerPath, \[\], \{ env: \{ __COMPAT_LAYER: "RunAsInvoker" \} \}\);\s*\}/;
-    
     const replacement = `// Patched for seamless multi-platform building without Wine requirement
         let extracted = false;
         try {
@@ -34,7 +30,6 @@ if (fs.existsSync(nsisTargetFile)) {
                 }
             }
         }`;
-
     if (originalPattern.test(content)) {
       content = content.replace(originalPattern, replacement);
       fs.writeFileSync(nsisTargetFile, content, 'utf8');

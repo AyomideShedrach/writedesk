@@ -1,48 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check authentication
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    // Helper function to check document ownership
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-
-    // User usage profiles and balance tracking
-    match /users/{userId} {
-      allow read: if isOwner(userId);
-      // Client can create initial profile if owner
-      allow create: if isOwner(userId) && request.resource.data.userId == userId;
-      // Client can update non-balance fields or sync usage
-      allow update: if isOwner(userId);
-      allow delete: if false;
-    }
-
-    // Payment transactions: verified records, append-only and immutable
-    match /transactions/{reference} {
-      // Users can only read their own transactions
-      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
-      // Allow create only if user owns the record and it does NOT already exist (no duplicate writes/overwrites)
-      allow create: if isAuthenticated() 
-        && request.resource.data.userId == request.auth.uid
-        && !exists(/databases/$(database)/documents/transactions/$(reference));
-      allow update, delete: if false;
-    }
-
-    // Device registry to enforce one-time 2 hours free usage per PC
-    match /claimed_devices/{deviceId} {
-      // Any authenticated or anonymous user can check if their PC has claimed the trial
-      allow read: if true;
-      // Only server-side Firebase Admin SDK can register a device trial
-      allow write: if false;
-    }
-
-    // Connection test document
-    match /test/connection {
-      allow read: if true;
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }

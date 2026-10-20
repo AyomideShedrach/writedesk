@@ -1,0 +1,7 @@
+name = "writedesk"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-19"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+NODE_VERSION = "24.12.0"
